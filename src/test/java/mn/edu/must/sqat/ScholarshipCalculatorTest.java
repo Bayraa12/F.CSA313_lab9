@@ -123,4 +123,18 @@ class ScholarshipCalculatorTest {
     void gpa_multipleElements_returnsAverageAcrossAllScores() {
         assertEquals(2.5, calculator.gpa(new double[]{95, 85, 75, 65}), 0.000001);
     }
+
+    @ParameterizedTest(name = "score={0}, grade={1}")
+    @CsvSource({
+            "60, D",
+            "59.99, F",
+            "69.99, D",
+            "0, F",
+            "100, A",
+            "89.99, B",
+            "90, A"
+    })
+    void letterGrade_boundaryScores_matchesSpecification(double score, String expected) {
+        assertEquals(expected, calculator.letterGrade(score));
+    }
 }
