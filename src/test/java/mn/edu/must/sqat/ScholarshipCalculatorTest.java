@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -102,5 +103,24 @@ class ScholarshipCalculatorTest {
     @Test
     void scholarship_lowGpa_returns0() {
         assertEquals(0, calculator.scholarship(2.9, 10, false));
+    }
+
+    @Test
+    void gpa_zeroElements_throwsForEmptyAndNullScores() {
+        assertAll(
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> calculator.gpa(new double[]{})),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> calculator.gpa(null)));
+    }
+
+    @Test
+    void gpa_oneElement_returnsItsGradePoints() {
+        assertEquals(4.0, calculator.gpa(new double[]{95}), 0.000001);
+    }
+
+    @Test
+    void gpa_multipleElements_returnsAverageAcrossAllScores() {
+        assertEquals(2.5, calculator.gpa(new double[]{95, 85, 75, 65}), 0.000001);
     }
 }
